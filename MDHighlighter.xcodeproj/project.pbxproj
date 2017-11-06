@@ -50,9 +50,10 @@
 		6F1D362A1FA79B660068D213 /* MDHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDHighlighter.swift; sourceTree = "<group>"; };
 		6F1D36311FA7A39F0068D213 /* TokenizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenizerTests.swift; sourceTree = "<group>"; };
 		6F1D36341FA7A3D30068D213 /* Tokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tokenizer.swift; sourceTree = "<group>"; };
-		6F1D36381FA7AD160068D213 /* MDHighlighter.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = MDHighlighter.strings; sourceTree = "<group>"; };
 		6F1D36391FA7ADEE0068D213 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		6F1D363A1FA7AE310068D213 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		6F3697551FA7FAC2005C7FE1 /* MDHighlighter.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = MDHighlighter.podspec; sourceTree = "<group>"; };
+		6F8453FC1FB0C72000C2FA3D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +96,7 @@
 				6F1D36371FA7ACE80068D213 /* Deployment */,
 				6F1D360C1FA7975F0068D213 /* Source */,
 				6F1D360D1FA797660068D213 /* Tests */,
+				6F8453FC1FB0C72000C2FA3D /* README.md */,
 				6F1D35F31FA797370068D213 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -149,7 +151,7 @@
 		6F1D36371FA7ACE80068D213 /* Deployment */ = {
 			isa = PBXGroup;
 			children = (
-				6F1D36381FA7AD160068D213 /* MDHighlighter.strings */,
+				6F3697551FA7FAC2005C7FE1 /* MDHighlighter.podspec */,
 				6F1D36391FA7ADEE0068D213 /* LICENSE */,
 				6F1D363A1FA7AE310068D213 /* Package.swift */,
 			);
