@@ -1,3 +1,3 @@
 # MDHighlighter
 
-Markdown syntax highlightning
+Markdown syntax highlighting
