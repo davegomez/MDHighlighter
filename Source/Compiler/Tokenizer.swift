@@ -29,7 +29,7 @@ struct Token {
 
 // MARK: - Constants
 
-/// Unicode strings used to detect and handle the characters in the input string
+/// Unicode strings used to detect and handle the characters in the input string.
 private let asterisk: Character = "\u{2a}"
 private let underscore: Character = "\u{5f}"
 private let pound: Character = "\u{23}"
@@ -41,7 +41,7 @@ private let squareBracketClose: Character = "\u{5d}"
 private let parenOpen: Character = "\u{28}"
 private let parenClose: Character = "\u{29}"
 
-/// Constants used to defined the Token's type
+/// Constants used to defined the Token's type.
 private let text = "text"
 private let lineBreak = "line-break"
 private let heading = "heading"
@@ -52,7 +52,7 @@ private let closingBracket = "closing-bracket"
 private let openingParen = "opening-paren"
 private let closingParen = "closing-paren"
 
-/// Functions to fix the strong emphasis cases
+/// Functions to fix the strong emphasis cases.
 ///
 /// - parameter tokens: The tokens array.
 /// - parameter char: The character to check for the strong emphasis intent.
@@ -65,8 +65,8 @@ private let fixStrongEmphasisUnderscore = fixStrongEmphasis()
 /// Fixes the current strong token when detects the appereance of a possible strong emphasis
 /// changing the current token to emphasis and creating a new one as a strong.
 ///
-/// Returns a new function that accepts two parameters (see above) and uses the isStrongEmphasisOpen
-/// flag to know if the openning strong emphasis token exists.
+/// Returns a new function that accepts two parameters (see above) and uses the `isStrongEmphasisOpen`
+/// flag to know if the opening strong emphasis token exists.
 private func fixStrongEmphasis() -> (_ tokens: inout [Token], _ char: Character) -> Token {
     var isStrongEmphasisOpen = false
     
@@ -83,7 +83,7 @@ private func fixStrongEmphasis() -> (_ tokens: inout [Token], _ char: Character)
 }
 
 /// Detects if the appearance of a tripple set of asterisk or underscore characters might be
-/// considered as a strong emphasis intent
+/// considered as a strong emphasis intent.
 ///
 /// - parameter tokens: The tokens array.
 /// - parameter char: The character to check for the strong emphasis intent.
@@ -103,9 +103,9 @@ private func isValidHeading(token: Token) -> Bool {
 
 /// According to the Commonmark Specification the headings only allow the existence of maximum
 /// three spaces before the first pound sign, this function validates if this existing space
-/// is valid
+/// is valid.
 ///
-/// - parameter value: The text token with spaces in its value
+/// - parameter value: The text token with spaces in its value.
 /// - returns: `true` if the spaces in the string are three or less, `false` if the spaces are more
 ///            than three or there is any other type of character in the string
 private func isValidSpaceBeforeHeading(value: String) -> Bool {
@@ -114,10 +114,10 @@ private func isValidSpaceBeforeHeading(value: String) -> Bool {
     })
 }
 
-/// Checks if the token before the current heading not valid. This is used to determine if the
-/// heading token must be transform to a text token instead.
+/// Checks if the token before the current heading is not valid. This is used to determine if the
+/// heading token must be transformed to a text token instead.
 ///
-/// - parameter tokens:
+/// - parameter tokens: The tokens array.
 /// - returns: `true` if the token is not valid, `false` otherwise.
 private func isNotValidTokenBeforeHeading(tokens: [Token]) -> Bool {
     return !tokens.isEmpty && (
@@ -130,7 +130,7 @@ private func isNotValidTokenBeforeHeading(tokens: [Token]) -> Bool {
 /// - parameter tokens: The tokens array.
 /// - parameter type: The type to check.
 /// - parameter value: An optional character in case we want to check for a more detailed match.
-/// - returns: `true` if the token matches the privided type and value, `false` otherwise.
+/// - returns: `true` if the token matches the provided type and value, `false` otherwise.
 private func isMatchingLastToken(tokens: [Token], type: String, value: Character?) -> Bool {
     if !tokens.isEmpty {
         let lastToken = tokens.last!
@@ -207,8 +207,8 @@ private func handlePound(char: Character, tokens: inout [Token]) -> [Token] {
 ///
 /// The rules to apply are:
 ///     * If there is one appearance of the character this is marked as emphasis.
-///     * If there is Two appearances of the character these are marked as strong.
-///     * If there is Three appearances of the character these are marked as emphasis > strong.
+///     * If there is two appearances of the character these are marked as strong.
+///     * If there is three appearances of the character these are marked as emphasis > strong.
 ///     * More than three appearances of the character are marked as text.
 ///
 /// - parameter char: The character to handle.
@@ -232,8 +232,8 @@ private func handleAsterisk(char: Character, tokens: inout [Token]) -> [Token] {
 ///
 /// The rules to apply are:
 ///     * If there is one appearance of the character this is marked as emphasis.
-///     * If there is Two appearances of the character these are marked as strong.
-///     * If there is Three appearances of the character these are marked as emphasis > strong.
+///     * If there is two appearances of the character these are marked as strong.
+///     * If there is three appearances of the character these are marked as emphasis > strong.
 ///     * More than three appearances of the character are marked as text.
 ///
 /// - parameter char: The character to handle.
@@ -258,7 +258,7 @@ private func handleUnderscore(char: Character, tokens: inout [Token]) -> [Token]
 /// Splits the incomming string into tokens using the Commonmark Specification to detect the
 /// markdown code (http://spec.commonmark.org/).
 ///
-/// - parameter input: The raw string coming from the TextView.
+/// - parameter input: The raw string coming from the `TextView`.
 /// - returns: An array of tokens.
 func tokenize(input: String) -> [Token] {
     var tokens: [Token] = []
