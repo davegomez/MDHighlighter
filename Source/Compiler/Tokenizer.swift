@@ -36,6 +36,10 @@ private let pound: Character = "\u{23}"
 private let backtick: Character = "\u{60}"
 private let space: Character = "\u{20}"
 private let lineFeed: Character = "\u{a}"
+private let squareBracketOpen: Character = "\u{5b}"
+private let squareBracketClose: Character = "\u{5d}"
+private let parenOpen: Character = "\u{28}"
+private let parenClose: Character = "\u{29}"
 
 /// Constants used to defined the Token's type
 private let text = "text"
@@ -43,6 +47,10 @@ private let lineBreak = "line-break"
 private let heading = "heading"
 private let emphasis = "emphasis"
 private let strong = "strong"
+private let openingBracket = "opening-bracket"
+private let closingBracket = "closing-bracket"
+private let openingParen = "opening-paren"
+private let closingParen = "closing-paren"
 
 /// Functions to fix the strong emphasis cases
 ///
@@ -156,13 +164,14 @@ private func handleCharacter(char: Character, tokens: inout [Token]) -> [Token] 
     return tokens
 }
 
-/// Handles the line feed character used by Markdown to denote line breaks.
+/// Handles several key single characters used by Markdown for several cases.
 ///
 /// - parameter char: The character to handle.
+/// - parameter type: The Token type that matches the key character.
 /// - parameter tokens: The tokens array.
 /// - returns: The modified array of tokens.
-private func handleLineFeed(char: Character, tokens: inout [Token]) -> [Token] {
-    tokens.append(Token(type: lineBreak, value: String(char)))
+private func handleSingleKeyCharacter(char: Character, type: String, tokens: inout [Token]) -> [Token] {
+    tokens.append(Token(type: type, value: String(char)))
     return tokens
 }
 
@@ -257,13 +266,21 @@ func tokenize(input: String) -> [Token] {
     for char in input {
         switch char {
         case lineFeed:
-            tokens = handleLineFeed(char: char, tokens: &tokens)
+            tokens = handleSingleKeyCharacter(char: char, type: lineBreak, tokens: &tokens)
         case pound:
             tokens = handlePound(char: char, tokens: &tokens)
         case asterisk:
             tokens = handleAsterisk(char: char, tokens: &tokens)
         case underscore:
             tokens = handleUnderscore(char: char, tokens: &tokens)
+        case squareBracketOpen:
+            tokens = handleSingleKeyCharacter(char: char, type: openingBracket, tokens: &tokens)
+        case squareBracketClose:
+            tokens = handleSingleKeyCharacter(char: char, type: closingBracket, tokens: &tokens)
+        case parenOpen:
+            tokens = handleSingleKeyCharacter(char: char, type: openingParen, tokens: &tokens)
+        case parenClose:
+            tokens = handleSingleKeyCharacter(char: char, type: closingParen, tokens: &tokens)
         default:
             tokens = handleCharacter(char: char, tokens: &tokens)
         }

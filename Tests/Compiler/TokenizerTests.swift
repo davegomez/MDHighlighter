@@ -33,11 +33,15 @@ extension Token: Equatable {
 
 class TokenizerTests: XCTestCase {
     
-    let text = "text"
-    let lineBreak = "line-break"
-    let heading = "heading"
-    let emphasis = "emphasis"
-    let strong = "strong"
+    private let text = "text"
+    private let lineBreak = "line-break"
+    private let heading = "heading"
+    private let emphasis = "emphasis"
+    private let strong = "strong"
+    private let openingBracket = "opening-bracket"
+    private let closingBracket = "closing-bracket"
+    private let openingParen = "opening-paren"
+    private let closingParen = "closing-paren"
     
     var tokens: [Token] = []
     
@@ -52,7 +56,7 @@ class TokenizerTests: XCTestCase {
         tokens = []
     }
     
-    func testText() {
+    func testMarkdown() {
         // tests...
     }
     
@@ -368,6 +372,18 @@ class TokenizerTests: XCTestCase {
         XCTAssertEqual(tokens[2], Token(type: emphasis, value: "*"))
         XCTAssertEqual(tokens[4], Token(type: emphasis, value: "*"))
         XCTAssertEqual(tokens[5], Token(type: strong, value: "__"))
+    }
+    
+    func testBrackets() {
+        tokens = tokenize(input: "foo [bar] baz")
+        XCTAssertEqual(tokens[1], Token(type: openingBracket, value: "["))
+        XCTAssertEqual(tokens[3], Token(type: closingBracket, value: "]"))
+    }
+    
+    func testParens() {
+        tokens = tokenize(input: "foo (bar) baz")
+        XCTAssertEqual(tokens[1], Token(type: openingParen, value: "("))
+        XCTAssertEqual(tokens[3], Token(type: closingParen, value: ")"))
     }
     
     func testPerformanceExample() {
