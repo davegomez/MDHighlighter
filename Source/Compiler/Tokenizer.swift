@@ -23,34 +23,38 @@
 //
 
 struct Token {
-    var type: String
+    /// Constants used to defined the Token's type.
+    enum Category {
+        case text
+        case lineBreak
+        case heading
+        case emphasis
+        case strong
+        case openingBracket
+        case closingBracket
+        case openingParen
+        case closingParen
+    }
+
+    var type: Category
     var value: String
 }
 
 // MARK: - Constants
 
 /// Unicode strings used to detect and handle the characters in the input string.
-private let asterisk: Character = "\u{2a}"
-private let underscore: Character = "\u{5f}"
-private let pound: Character = "\u{23}"
-private let backtick: Character = "\u{60}"
-private let space: Character = "\u{20}"
-private let lineFeed: Character = "\u{a}"
-private let squareBracketOpen: Character = "\u{5b}"
-private let squareBracketClose: Character = "\u{5d}"
-private let parenOpen: Character = "\u{28}"
-private let parenClose: Character = "\u{29}"
-
-/// Constants used to defined the Token's type.
-private let text = "text"
-private let lineBreak = "line-break"
-private let heading = "heading"
-private let emphasis = "emphasis"
-private let strong = "strong"
-private let openingBracket = "opening-bracket"
-private let closingBracket = "closing-bracket"
-private let openingParen = "opening-paren"
-private let closingParen = "closing-paren"
+enum MarkdownGlyph: Character {
+    case asterisk           = "\u{2a}"
+    case underscore         = "\u{5f}"
+    case pound              = "\u{23}"
+    case backtick           = "\u{60}"
+    case space              = "\u{20}"
+    case lineFeed           = "\u{a}"
+    case squareBracketOpen  = "\u{5b}"
+    case squareBracketClose = "\u{5d}"
+    case parenOpen          = "\u{28}"
+    case parenClose         = "\u{29}"
+}
 
 /// Functions to fix the strong emphasis cases.
 ///
@@ -72,13 +76,13 @@ private func fixStrongEmphasis() -> (_ tokens: inout [Token], _ char: Character)
     
     return { (tokens: inout [Token], char: Character) in
         if isStrongEmphasisOpen {
-            tokens[tokens.count - 1] = Token(type: emphasis, value: String(char))
+            tokens[tokens.count - 1] = Token(type: .emphasis, value: String(char))
             isStrongEmphasisOpen = false
-            return Token(type: strong, value: "\(char)\(char)")
+            return Token(type: .strong, value: "\(char)\(char)")
         }
         
         isStrongEmphasisOpen = true
-        return Token(type: emphasis, value: String(char))
+        return Token(type: .emphasis, value: String(char))
     }
 }
 
@@ -90,7 +94,7 @@ private func fixStrongEmphasis() -> (_ tokens: inout [Token], _ char: Character)
 ///
 /// - returns: `true` if is strong emphasis intent, `false` otherwise.
 private func isStrongEmphasis(tokens: [Token], char: Character) -> Bool {
-    return !tokens.isEmpty && tokens.last?.type == strong && tokens.last?.value == "\(char)\(char)"
+    return !tokens.isEmpty && tokens.last?.type == .strong && tokens.last?.value == "\(char)\(char)"
 }
 
 /// Determines if the token is a valid heading.
@@ -98,7 +102,7 @@ private func isStrongEmphasis(tokens: [Token], char: Character) -> Bool {
 /// - parameter token: The heading token to validate.
 /// - returns: `true` if the token is a valid heading token, `false` otherwise.
 private func isValidHeading(token: Token) -> Bool {
-    return token.type == heading && token.value.count < 6
+    return token.type == .heading && token.value.count < 6
 }
 
 /// According to the Commonmark Specification the headings only allow the existence of maximum
@@ -110,7 +114,7 @@ private func isValidHeading(token: Token) -> Bool {
 ///            than three or there is any other type of character in the string
 private func isValidSpaceBeforeHeading(value: String) -> Bool {
     return value.count < 4 && value.reduce(true, { x, y in
-        x && y == space
+        x && y == MarkdownGlyph.space.rawValue
     })
 }
 
@@ -121,7 +125,7 @@ private func isValidSpaceBeforeHeading(value: String) -> Bool {
 /// - returns: `true` if the token is not valid, `false` otherwise.
 private func isNotValidTokenBeforeHeading(tokens: [Token]) -> Bool {
     return !tokens.isEmpty && (
-        !(isValidSpaceBeforeHeading(value: tokens.last!.value) || tokens.last!.type == lineBreak)
+        !(isValidSpaceBeforeHeading(value: tokens.last!.value) || tokens.last!.type == .lineBreak)
     )
 }
 
@@ -131,12 +135,12 @@ private func isNotValidTokenBeforeHeading(tokens: [Token]) -> Bool {
 /// - parameter type: The type to check.
 /// - parameter value: An optional character in case we want to check for a more detailed match.
 /// - returns: `true` if the token matches the provided type and value, `false` otherwise.
-private func isMatchingLastToken(tokens: [Token], type: String, value: Character?) -> Bool {
+private func isMatchingLastToken(tokens: [Token], type: Token.Category, value: MarkdownGlyph?) -> Bool {
     if !tokens.isEmpty {
         let lastToken = tokens.last!
         
         if let value = value {
-            return lastToken.type == type && lastToken.value == String(value)
+            return lastToken.type == type && lastToken.value == String(value.rawValue)
         } else {
             return lastToken.type == type
         }
@@ -153,10 +157,10 @@ private func isMatchingLastToken(tokens: [Token], type: String, value: Character
 /// - parameter tokens: The tokens array.
 /// - returns: The modified array of tokens.
 private func handleCharacter(char: Character, tokens: inout [Token]) -> [Token] {
-    var token: Token = Token(type: text, value: String(char))
+    var token: Token = Token(type: .text, value: String(char))
     
-    if isMatchingLastToken(tokens: tokens, type: text, value: nil) {
-        token = Token(type: text, value: tokens.last!.value + String(char))
+    if isMatchingLastToken(tokens: tokens, type: .text, value: nil) {
+        token = Token(type: .text, value: tokens.last!.value + String(char))
         tokens.removeLast()
     }
     
@@ -170,7 +174,7 @@ private func handleCharacter(char: Character, tokens: inout [Token]) -> [Token] 
 /// - parameter type: The Token type that matches the key character.
 /// - parameter tokens: The tokens array.
 /// - returns: The modified array of tokens.
-private func handleSingleKeyCharacter(char: Character, type: String, tokens: inout [Token]) -> [Token] {
+private func handleSingleKeyCharacter(char: Character, type: Token.Category, tokens: inout [Token]) -> [Token] {
     tokens.append(Token(type: type, value: String(char)))
     return tokens
 }
@@ -185,17 +189,17 @@ private func handleSingleKeyCharacter(char: Character, type: String, tokens: ino
 /// - parameter tokens: The tokens array.
 /// - returns: The modified array of tokens.
 private func handlePound(char: Character, tokens: inout [Token]) -> [Token] {
-    var token: Token = Token(type: heading, value: String(char))
+    var token: Token = Token(type: .heading, value: String(char))
     
-    if isMatchingLastToken(tokens: tokens, type: heading, value: nil) {
-        let type = isValidHeading(token: tokens.last!) ? heading : text
+    if isMatchingLastToken(tokens: tokens, type: .heading, value: nil) {
+        let type: Token.Category = isValidHeading(token: tokens.last!) ? .heading : .text
         let value = "\(tokens.last!.value)\(char)"
         token = Token(type: type, value: value)
         tokens.removeLast()
     }
     
     if !tokens.isEmpty && isNotValidTokenBeforeHeading(tokens: tokens) {
-        token = Token(type: text, value: "\(tokens.last!.value)\(char)")
+        token = Token(type: .text, value: "\(tokens.last!.value)\(char)")
         tokens.removeLast()
     }
     
@@ -215,12 +219,12 @@ private func handlePound(char: Character, tokens: inout [Token]) -> [Token] {
 /// - parameter tokens: The tokens array.
 /// - returns: The modified array of tokens.
 private func handleAsterisk(char: Character, tokens: inout [Token]) -> [Token] {
-    var token: Token = Token(type: emphasis, value: String(char))
+    var token: Token = Token(type: .emphasis, value: String(char))
     
     if isStrongEmphasis(tokens: tokens, char: char) {
         token = fixStrongEmphasisAsterisk(_: &tokens, _: char)
-    } else if isMatchingLastToken(tokens: tokens, type: emphasis, value: asterisk) {
-        token = Token(type: strong, value: "\(tokens.last!.value)\(char)")
+    } else if isMatchingLastToken(tokens: tokens, type: .emphasis, value: .asterisk) {
+        token = Token(type: .strong, value: "\(tokens.last!.value)\(char)")
         tokens.removeLast()
     }
     
@@ -240,12 +244,12 @@ private func handleAsterisk(char: Character, tokens: inout [Token]) -> [Token] {
 /// - parameter tokens: The tokens array.
 /// - returns: The modified array of tokens.
 private func handleUnderscore(char: Character, tokens: inout [Token]) -> [Token] {
-    var token: Token = Token(type: emphasis, value: String(char))
+    var token: Token = Token(type: .emphasis, value: String(char))
     
     if isStrongEmphasis(tokens: tokens, char: char) {
         token = fixStrongEmphasisUnderscore(_: &tokens, _: char)
-    } else if isMatchingLastToken(tokens: tokens, type: emphasis, value: underscore) {
-        token = Token(type: strong, value: tokens.last!.value + String(char))
+    } else if isMatchingLastToken(tokens: tokens, type: .emphasis, value: .underscore) {
+        token = Token(type: .strong, value: tokens.last!.value + String(char))
         tokens.removeLast()
     }
     
@@ -264,24 +268,29 @@ func tokenize(input: String) -> [Token] {
     var tokens: [Token] = []
     
     for char in input {
-        switch char {
-        case lineFeed:
-            tokens = handleSingleKeyCharacter(char: char, type: lineBreak, tokens: &tokens)
-        case pound:
-            tokens = handlePound(char: char, tokens: &tokens)
-        case asterisk:
-            tokens = handleAsterisk(char: char, tokens: &tokens)
-        case underscore:
-            tokens = handleUnderscore(char: char, tokens: &tokens)
-        case squareBracketOpen:
-            tokens = handleSingleKeyCharacter(char: char, type: openingBracket, tokens: &tokens)
-        case squareBracketClose:
-            tokens = handleSingleKeyCharacter(char: char, type: closingBracket, tokens: &tokens)
-        case parenOpen:
-            tokens = handleSingleKeyCharacter(char: char, type: openingParen, tokens: &tokens)
-        case parenClose:
-            tokens = handleSingleKeyCharacter(char: char, type: closingParen, tokens: &tokens)
-        default:
+        if let markdownGlyph = MarkdownGlyph(rawValue: char) {
+            switch markdownGlyph {
+            case .lineFeed:
+                tokens = handleSingleKeyCharacter(char: char, type: .lineBreak, tokens: &tokens)
+            case .pound:
+                tokens = handlePound(char: char, tokens: &tokens)
+            case .asterisk:
+                tokens = handleAsterisk(char: char, tokens: &tokens)
+            case .underscore:
+                tokens = handleUnderscore(char: char, tokens: &tokens)
+            case .squareBracketOpen:
+                tokens = handleSingleKeyCharacter(char: char, type: .openingBracket, tokens: &tokens)
+            case .squareBracketClose:
+                tokens = handleSingleKeyCharacter(char: char, type: .closingBracket, tokens: &tokens)
+            case .parenOpen:
+                tokens = handleSingleKeyCharacter(char: char, type: .openingParen, tokens: &tokens)
+            case .parenClose:
+                tokens = handleSingleKeyCharacter(char: char, type: .closingParen, tokens: &tokens)
+            default:
+                /// Cover .backtick & .space
+                tokens = handleCharacter(char: char, tokens: &tokens)
+            }
+        } else {
             tokens = handleCharacter(char: char, tokens: &tokens)
         }
     }
