@@ -32,17 +32,6 @@ extension Token: Equatable {
 }
 
 class TokenizerTests: XCTestCase {
-    
-    private let text = "text"
-    private let lineBreak = "line-break"
-    private let heading = "heading"
-    private let emphasis = "emphasis"
-    private let strong = "strong"
-    private let openingBracket = "opening-bracket"
-    private let closingBracket = "closing-bracket"
-    private let openingParen = "opening-paren"
-    private let closingParen = "closing-paren"
-    
     var tokens: [Token] = []
     
     override func setUp() {
@@ -60,330 +49,330 @@ class TokenizerTests: XCTestCase {
         // tests...
     }
     
-    func testLineBreak() {
+    func testlineBreak() {
         tokens = tokenize(input: "\n")
-        XCTAssertEqual(tokens.first, Token(type: lineBreak, value: "\n"))
+        XCTAssertEqual(tokens.first, Token(type: .lineBreak, value: "\n"))
         
         tokens = tokenize(input: "\n\n")
-        XCTAssertEqual(tokens.first, Token(type: lineBreak, value: "\n"))
-        XCTAssertEqual(tokens.last, Token(type: lineBreak, value: "\n"))
-        
+        XCTAssertEqual(tokens.first, Token(type: .lineBreak, value: "\n"))
+        XCTAssertEqual(tokens.last, Token(type: .lineBreak, value: "\n"))
+
         tokens = tokenize(input: " \n\n ")
-        XCTAssertEqual(tokens[1], Token(type: lineBreak, value: "\n"))
-        XCTAssertEqual(tokens[2], Token(type: lineBreak, value: "\n"))
+        XCTAssertEqual(tokens[1], Token(type: .lineBreak, value: "\n"))
+        XCTAssertEqual(tokens[2], Token(type: .lineBreak, value: "\n"))
         
         tokens = tokenize(input: "\n \n")
-        XCTAssertEqual(tokens.first, Token(type: lineBreak, value: "\n"))
-        XCTAssertEqual(tokens.last, Token(type: lineBreak, value: "\n"))
+        XCTAssertEqual(tokens.first, Token(type: .lineBreak, value: "\n"))
+        XCTAssertEqual(tokens.last, Token(type: .lineBreak, value: "\n"))
         
         tokens = tokenize(input: " \n \n ")
-        XCTAssertEqual(tokens[1], Token(type: lineBreak, value: "\n"))
-        XCTAssertEqual(tokens[3], Token(type: lineBreak, value: "\n"))
+        XCTAssertEqual(tokens[1], Token(type: .lineBreak, value: "\n"))
+        XCTAssertEqual(tokens[3], Token(type: .lineBreak, value: "\n"))
     }
     
     func testHeading() {
         tokens = tokenize(input: "#")
-        XCTAssertEqual(tokens.first, Token(type: heading, value: "#"))
+        XCTAssertEqual(tokens.first, Token(type: .heading, value: "#"))
 
         tokens = tokenize(input: "# ")
-        XCTAssertEqual(tokens.first, Token(type: heading, value: "#"))
+        XCTAssertEqual(tokens.first, Token(type: .heading, value: "#"))
 
         tokens = tokenize(input: "# foo")
-        XCTAssertEqual(tokens.first, Token(type: heading, value: "#"))
+        XCTAssertEqual(tokens.first, Token(type: .heading, value: "#"))
 
         tokens = tokenize(input: "foo\n#")
-        XCTAssertEqual(tokens.last, Token(type: heading, value: "#"))
+        XCTAssertEqual(tokens.last, Token(type: .heading, value: "#"))
 
         tokens = tokenize(input: "foo\n# ")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "#"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "#"))
 
         tokens = tokenize(input: "foo\n# bar")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "#"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "#"))
 
         tokens = tokenize(input: "foo\n# bar\n")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "#"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "#"))
 
         tokens = tokenize(input: "foo\n##")
-        XCTAssertEqual(tokens.last, Token(type: heading, value: "##"))
+        XCTAssertEqual(tokens.last, Token(type: .heading, value: "##"))
 
         tokens = tokenize(input: "foo\n## ")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "##"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "##"))
 
         tokens = tokenize(input: "foo\n## bar")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "##"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "##"))
 
         tokens = tokenize(input: "foo\n## bar\n")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "##"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "##"))
 
         tokens = tokenize(input: "foo\n###")
-        XCTAssertEqual(tokens.last, Token(type: heading, value: "###"))
+        XCTAssertEqual(tokens.last, Token(type: .heading, value: "###"))
 
         tokens = tokenize(input: "foo\n### ")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "###"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "###"))
 
         tokens = tokenize(input: "foo\n### bar")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "###"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "###"))
 
         tokens = tokenize(input: "foo\n### bar\n")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "###"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "###"))
 
         tokens = tokenize(input: "foo\n####")
-        XCTAssertEqual(tokens.last, Token(type: heading, value: "####"))
+        XCTAssertEqual(tokens.last, Token(type: .heading, value: "####"))
 
         tokens = tokenize(input: "foo\n#### ")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "####"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "####"))
 
         tokens = tokenize(input: "foo\n#### bar")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "####"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "####"))
 
         tokens = tokenize(input: "foo\n#### bar\n")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "####"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "####"))
 
         tokens = tokenize(input: "foo\n#####")
-        XCTAssertEqual(tokens.last, Token(type: heading, value: "#####"))
+        XCTAssertEqual(tokens.last, Token(type: .heading, value: "#####"))
 
         tokens = tokenize(input: "foo\n##### ")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "#####"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "#####"))
 
         tokens = tokenize(input: "foo\n##### bar")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "#####"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "#####"))
 
         tokens = tokenize(input: "foo\n##### bar\n")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "#####"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "#####"))
 
         tokens = tokenize(input: "foo\n######")
-        XCTAssertEqual(tokens.last, Token(type: heading, value: "######"))
+        XCTAssertEqual(tokens.last, Token(type: .heading, value: "######"))
 
         tokens = tokenize(input: "foo\n###### ")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "######"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "######"))
 
         tokens = tokenize(input: "foo\n###### bar")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "######"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "######"))
 
         tokens = tokenize(input: "foo\n###### bar\n")
-        XCTAssertEqual(tokens[2], Token(type: heading, value: "######"))
+        XCTAssertEqual(tokens[2], Token(type: .heading, value: "######"))
 
         tokens = tokenize(input: "foo\n#######")
-        XCTAssertEqual(tokens.last, Token(type: text, value: "#######"))
+        XCTAssertEqual(tokens.last, Token(type: .text, value: "#######"))
 
         tokens = tokenize(input: "foo\n####### ")
-        XCTAssertEqual(tokens[2], Token(type: text, value: "####### "))
+        XCTAssertEqual(tokens[2], Token(type: .text, value: "####### "))
 
         tokens = tokenize(input: "foo\n####### bar")
-        XCTAssertEqual(tokens[2], Token(type: text, value: "####### bar"))
+        XCTAssertEqual(tokens[2], Token(type: .text, value: "####### bar"))
 
         tokens = tokenize(input: "foo\n####### bar\n")
-        XCTAssertEqual(tokens[2], Token(type: text, value: "####### bar"))
+        XCTAssertEqual(tokens[2], Token(type: .text, value: "####### bar"))
 
         tokens = tokenize(input: "foo\n # bar")
-        XCTAssertEqual(tokens[3], Token(type: heading, value: "#"))
+        XCTAssertEqual(tokens[3], Token(type: .heading, value: "#"))
 
         tokens = tokenize(input: "foo\n  # bar")
-        XCTAssertEqual(tokens[3], Token(type: heading, value: "#"))
+        XCTAssertEqual(tokens[3], Token(type: .heading, value: "#"))
 
         tokens = tokenize(input: "foo\n   # bar")
-        XCTAssertEqual(tokens[3], Token(type: heading, value: "#"))
+        XCTAssertEqual(tokens[3], Token(type: .heading, value: "#"))
 
         tokens = tokenize(input: "foo\n    # bar")
-        XCTAssertEqual(tokens.last, Token(type: text, value: "    # bar"))
+        XCTAssertEqual(tokens.last, Token(type: .text, value: "    # bar"))
 
         tokens = tokenize(input: "foo # bar")
-        XCTAssertEqual(tokens.first, Token(type: text, value: "foo # bar"))
+        XCTAssertEqual(tokens.first, Token(type: .text, value: "foo # bar"))
 
         tokens = tokenize(input: "foo # \n bar")
-        XCTAssertEqual(tokens.first, Token(type: text, value: "foo # "))
+        XCTAssertEqual(tokens.first, Token(type: .text, value: "foo # "))
     }
     
     func testEmphasis() {
         tokens = tokenize(input: "*")
-        XCTAssertEqual(tokens.first, Token(type: emphasis, value: "*"))
+        XCTAssertEqual(tokens.first, Token(type: .emphasis, value: "*"))
         
         tokens = tokenize(input: "_")
-        XCTAssertEqual(tokens.first, Token(type: emphasis, value: "_"))
+        XCTAssertEqual(tokens.first, Token(type: .emphasis, value: "_"))
         
         tokens = tokenize(input: "*foo*")
-        XCTAssertEqual(tokens.first, Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens.last, Token(type: emphasis, value: "*"))
+        XCTAssertEqual(tokens.first, Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens.last, Token(type: .emphasis, value: "*"))
         
         tokens = tokenize(input: " *foo* ")
-        XCTAssertEqual(tokens[1], Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[3], Token(type: emphasis, value: "*"))
+        XCTAssertEqual(tokens[1], Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[3], Token(type: .emphasis, value: "*"))
         
         tokens = tokenize(input: "_foo_")
-        XCTAssertEqual(tokens.first, Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens.last, Token(type: emphasis, value: "_"))
+        XCTAssertEqual(tokens.first, Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens.last, Token(type: .emphasis, value: "_"))
         
         tokens = tokenize(input: " _foo_ ")
-        XCTAssertEqual(tokens[1], Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[3], Token(type: emphasis, value: "_"))
+        XCTAssertEqual(tokens[1], Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[3], Token(type: .emphasis, value: "_"))
     }
     
     func testStrong() {
         tokens = tokenize(input: "**")
-        XCTAssertEqual(tokens.first, Token(type: strong, value: "**"))
+        XCTAssertEqual(tokens.first, Token(type: .strong, value: "**"))
         
         tokens = tokenize(input: "__")
-        XCTAssertEqual(tokens.first, Token(type: strong, value: "__"))
+        XCTAssertEqual(tokens.first, Token(type: .strong, value: "__"))
         
         tokens = tokenize(input: "**foo**")
-        XCTAssertEqual(tokens.first, Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens.last, Token(type: strong, value: "**"))
+        XCTAssertEqual(tokens.first, Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens.last, Token(type: .strong, value: "**"))
         
         tokens = tokenize(input: " **foo** ")
-        XCTAssertEqual(tokens[1], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[3], Token(type: strong, value: "**"))
+        XCTAssertEqual(tokens[1], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[3], Token(type: .strong, value: "**"))
         
         tokens = tokenize(input: "__foo__")
-        XCTAssertEqual(tokens.first, Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens.last, Token(type: strong, value: "__"))
+        XCTAssertEqual(tokens.first, Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens.last, Token(type: .strong, value: "__"))
         
         tokens = tokenize(input: " __foo__ ")
-        XCTAssertEqual(tokens[1], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[3], Token(type: strong, value: "__"))
+        XCTAssertEqual(tokens[1], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[3], Token(type: .strong, value: "__"))
     }
     
     func testStrongEmphasis() {
         tokens = tokenize(input: "***")
-        XCTAssertEqual(tokens.first, Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens.last, Token(type: emphasis, value: "*"))
+        XCTAssertEqual(tokens.first, Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens.last, Token(type: .emphasis, value: "*"))
         
         tokens = tokenize(input: "___")
-        XCTAssertEqual(tokens.first, Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens.last, Token(type: emphasis, value: "_"))
+        XCTAssertEqual(tokens.first, Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens.last, Token(type: .emphasis, value: "_"))
         
         tokens = tokenize(input: "**_")
-        XCTAssertEqual(tokens.first, Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens.last, Token(type: emphasis, value: "_"))
+        XCTAssertEqual(tokens.first, Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens.last, Token(type: .emphasis, value: "_"))
         
         tokens = tokenize(input: "__*")
-        XCTAssertEqual(tokens.first, Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens.last, Token(type: emphasis, value: "*"))
+        XCTAssertEqual(tokens.first, Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens.last, Token(type: .emphasis, value: "*"))
         
         tokens = tokenize(input: "***foo***")
-        XCTAssertEqual(tokens.first, Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[1], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[3], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens.last, Token(type: emphasis, value: "*"))
+        XCTAssertEqual(tokens.first, Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[1], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[3], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens.last, Token(type: .emphasis, value: "*"))
         
         tokens = tokenize(input: "***foo*** ***bar***")
         print(tokens)
-        XCTAssertEqual(tokens.first, Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[1], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[3], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[4], Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[6], Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[7], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[9], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens.last, Token(type: emphasis, value: "*"))
+        XCTAssertEqual(tokens.first, Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[1], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[3], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[4], Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[6], Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[7], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[9], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens.last, Token(type: .emphasis, value: "*"))
         
         tokens = tokenize(input: " ***foo*** ")
-        XCTAssertEqual(tokens[1], Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[2], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[4], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[5], Token(type: emphasis, value: "*"))
+        XCTAssertEqual(tokens[1], Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[2], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[4], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[5], Token(type: .emphasis, value: "*"))
         
         tokens = tokenize(input: " ***foo*** ***bar*** ")
-        XCTAssertEqual(tokens[1], Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[2], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[4], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[5], Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[7], Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[8], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[10], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[11], Token(type: emphasis, value: "*"))
+        XCTAssertEqual(tokens[1], Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[2], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[4], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[5], Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[7], Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[8], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[10], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[11], Token(type: .emphasis, value: "*"))
         
         tokens = tokenize(input: "___foo___")
-        XCTAssertEqual(tokens.first, Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[1], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[3], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens.last, Token(type: emphasis, value: "_"))
+        XCTAssertEqual(tokens.first, Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[1], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[3], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens.last, Token(type: .emphasis, value: "_"))
         
         tokens = tokenize(input: "___foo___ ___bar___")
         print(tokens)
-        XCTAssertEqual(tokens.first, Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[1], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[3], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[4], Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[6], Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[7], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[9], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens.last, Token(type: emphasis, value: "_"))
+        XCTAssertEqual(tokens.first, Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[1], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[3], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[4], Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[6], Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[7], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[9], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens.last, Token(type: .emphasis, value: "_"))
         
         tokens = tokenize(input: " ___foo___ ")
-        XCTAssertEqual(tokens[1], Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[2], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[4], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[5], Token(type: emphasis, value: "_"))
+        XCTAssertEqual(tokens[1], Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[2], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[4], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[5], Token(type: .emphasis, value: "_"))
         
         tokens = tokenize(input: " ___foo___ ___bar___ ")
-        XCTAssertEqual(tokens[1], Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[2], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[4], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[5], Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[7], Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[8], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[10], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[11], Token(type: emphasis, value: "_"))
+        XCTAssertEqual(tokens[1], Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[2], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[4], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[5], Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[7], Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[8], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[10], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[11], Token(type: .emphasis, value: "_"))
         
         tokens = tokenize(input: "_**foo**_")
-        XCTAssertEqual(tokens.first, Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[1], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[3], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens.last, Token(type: emphasis, value: "_"))
+        XCTAssertEqual(tokens.first, Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[1], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[3], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens.last, Token(type: .emphasis, value: "_"))
         
         tokens = tokenize(input: "**_foo_**")
-        XCTAssertEqual(tokens.first, Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[1], Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[3], Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens.last, Token(type: strong, value: "**"))
+        XCTAssertEqual(tokens.first, Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[1], Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[3], Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens.last, Token(type: .strong, value: "**"))
         
         tokens = tokenize(input: " _**foo**_ ")
-        XCTAssertEqual(tokens[1], Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[2], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[4], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[5], Token(type: emphasis, value: "_"))
+        XCTAssertEqual(tokens[1], Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[2], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[4], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[5], Token(type: .emphasis, value: "_"))
         
         tokens = tokenize(input: " **_foo_** ")
-        XCTAssertEqual(tokens[1], Token(type: strong, value: "**"))
-        XCTAssertEqual(tokens[2], Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[4], Token(type: emphasis, value: "_"))
-        XCTAssertEqual(tokens[5], Token(type: strong, value: "**"))
+        XCTAssertEqual(tokens[1], Token(type: .strong, value: "**"))
+        XCTAssertEqual(tokens[2], Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[4], Token(type: .emphasis, value: "_"))
+        XCTAssertEqual(tokens[5], Token(type: .strong, value: "**"))
         
         tokens = tokenize(input: "*__foo__*")
-        XCTAssertEqual(tokens.first, Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[1], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[3], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens.last, Token(type: emphasis, value: "*"))
+        XCTAssertEqual(tokens.first, Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[1], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[3], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens.last, Token(type: .emphasis, value: "*"))
         
         tokens = tokenize(input: "__*foo*__")
-        XCTAssertEqual(tokens.first, Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[1], Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[3], Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens.last, Token(type: strong, value: "__"))
+        XCTAssertEqual(tokens.first, Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[1], Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[3], Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens.last, Token(type: .strong, value: "__"))
         
         tokens = tokenize(input: " *__foo__* ")
-        XCTAssertEqual(tokens[1], Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[2], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[4], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[5], Token(type: emphasis, value: "*"))
+        XCTAssertEqual(tokens[1], Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[2], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[4], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[5], Token(type: .emphasis, value: "*"))
         
         tokens = tokenize(input: " __*foo*__ ")
-        XCTAssertEqual(tokens[1], Token(type: strong, value: "__"))
-        XCTAssertEqual(tokens[2], Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[4], Token(type: emphasis, value: "*"))
-        XCTAssertEqual(tokens[5], Token(type: strong, value: "__"))
+        XCTAssertEqual(tokens[1], Token(type: .strong, value: "__"))
+        XCTAssertEqual(tokens[2], Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[4], Token(type: .emphasis, value: "*"))
+        XCTAssertEqual(tokens[5], Token(type: .strong, value: "__"))
     }
     
     func testBrackets() {
         tokens = tokenize(input: "foo [bar] baz")
-        XCTAssertEqual(tokens[1], Token(type: openingBracket, value: "["))
-        XCTAssertEqual(tokens[3], Token(type: closingBracket, value: "]"))
+        XCTAssertEqual(tokens[1], Token(type: .openingBracket, value: "["))
+        XCTAssertEqual(tokens[3], Token(type: .closingBracket, value: "]"))
     }
     
     func testParens() {
         tokens = tokenize(input: "foo (bar) baz")
-        XCTAssertEqual(tokens[1], Token(type: openingParen, value: "("))
-        XCTAssertEqual(tokens[3], Token(type: closingParen, value: ")"))
+        XCTAssertEqual(tokens[1], Token(type: .openingParen, value: "("))
+        XCTAssertEqual(tokens[3], Token(type: .closingParen, value: ")"))
     }
     
     func testPerformanceExample() {
