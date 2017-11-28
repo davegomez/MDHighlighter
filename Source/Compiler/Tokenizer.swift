@@ -91,7 +91,7 @@ struct Token {
 /// - returns: An array containing the merged token or the passed tokens in case theyr type doesn't match
 private func mergeTokens(forType category: Category, _ first: Token, _ second: Token) -> [Token] {
     if first.type == category && second.type == category {
-        return [Token(type: category, value: "\(first.value)\(second.value)")]
+        return [Token(type: category, value: first.value + second.value)]
     }
     
     return [first, second]
